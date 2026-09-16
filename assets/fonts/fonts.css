@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'Inter';
+  src: url(./Inter.ttf) format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url(./JetBrainsMono.ttf) format('truetype');
+  font-display: swap;
+}

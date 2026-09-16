@@ -1,0 +1,575 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-primary: #3b82f6;
+  --color-primary-hover: #3b82f6d9;
+  --color-primary-soft: #3b82f61a;
+  --color-danger: #ef4444;
+  --color-success: #10b981;
+
+  --color-text: #111827;
+  --color-text-secondary: #6b7280;
+
+  --color-bg: #f9fafb;
+  --color-surface: #ffffff;
+  --color-border: #e5e7eb;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --shadow-e1: 0 2px 8px rgb(0 0 0 / 0.1);
+  --shadow-e2: 0 4px 16px rgb(0 0 0 / 0.12);
+  --shadow-e3: 0 8px 24px rgb(0 0 0 / 0.14);
+
+  --breakpoint-xl: 1440px;
+}
+
+@layer base {
+  body {
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: var(--color-bg);
+  }
+}
+
+@layer components {
+  .page {
+    padding-inline: clamp(16px, -67.21px + 22.19vw, 160px);
+    @apply w-full min-h-dvh flex flex-col;
+  }
+
+  .page--center {
+    @apply justify-center;
+  }
+
+  .page__content {
+    padding-inline: clamp(0px, -52px + 13.867vw, 90px);
+    @apply flex flex-col flex-1 w-full;
+  }
+
+  .btn {
+    @apply inline-flex w-full items-center justify-center px-0 py-3
+           rounded-sm font-medium text-base text-center
+           transition-colors duration-200 cursor-pointer
+           border border-transparent;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white;
+  }
+  .btn-primary:hover {
+    @apply bg-primary-hover;
+  }
+
+  .btn-secondary {
+    @apply bg-surface text-primary border-primary;
+  }
+  .btn-secondary:hover {
+    @apply bg-primary-soft;
+  }
+
+  .btn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .card {
+    @apply px-4 py-8;
+  }
+
+  .input-wrapper {
+    @apply flex flex-col gap-1;
+  }
+
+  .input-label {
+    @apply block text-xs text-text-secondary pl-3;
+  }
+
+  .input-field {
+    @apply w-full px-3 py-3
+           bg-surface text-text text-base
+           border border-border rounded-sm
+           outline-none
+           transition-colors duration-200
+           placeholder:text-text-secondary;
+  }
+  .input-field:hover {
+    @apply border-primary;
+  }
+  .input-field:focus {
+    @apply border-primary border-2;
+  }
+
+  .input-error {
+    @apply text-xs text-danger;
+  }
+
+  .input-field--error {
+    @apply border-danger;
+  }
+
+  .input-field--readonly {
+    @apply bg-bg cursor-default;
+  }
+
+  .input-field--readonly:hover {
+    @apply border-border;
+  }
+
+  .period-select {
+    @apply relative w-full;
+  }
+
+  .period-select__trigger {
+    @apply w-full flex items-center justify-between gap-2
+           px-3 py-3 bg-surface text-text text-base text-left
+           border border-border rounded-sm
+           transition-colors duration-200 cursor-pointer;
+  }
+
+  .period-select__trigger:hover {
+    @apply border-primary;
+  }
+
+  .period-select__trigger:focus-visible,
+  .period-select__trigger--open {
+    border-width: 2px;
+    @apply border-primary outline-none;
+  }
+
+  .period-select__value {
+    @apply truncate;
+  }
+
+  .period-select__value--placeholder {
+    @apply text-text-secondary;
+  }
+
+  .period-select__chevron {
+    @apply shrink-0 transition-transform duration-200;
+  }
+
+  .period-select__trigger--open .period-select__chevron {
+    @apply rotate-180;
+  }
+
+  .period-select__dropdown {
+    @apply absolute left-0 right-0 z-20 mt-2
+           bg-surface rounded-md shadow-e2
+           overflow-hidden;
+  }
+
+  .period-select__options {
+    @apply flex flex-col py-1;
+  }
+
+  .period-select__option {
+    @apply w-full flex items-center justify-between gap-3
+           px-4 py-3 text-base text-left text-text
+           transition-colors duration-150 cursor-pointer;
+  }
+
+  .period-select__option:hover {
+    @apply bg-primary-soft text-primary;
+  }
+
+  .period-select__option-date {
+    @apply text-sm text-text-secondary;
+  }
+
+  .period-select__option:hover .period-select__option-date {
+    @apply text-primary;
+  }
+
+  .period-select__calendar {
+    @apply p-1;
+  }
+
+  .period-select__calendar .date-input {
+    @apply shadow-none p-2 max-w-none;
+  }
+
+  .period-select--error .period-select__trigger {
+    @apply border-danger;
+  }
+
+  .date-input {
+    @apply relative bg-surface rounded-md shadow-e2 p-4 w-full max-w-xs;
+  }
+
+  .date-input__header {
+    @apply flex items-center justify-between mb-3 px-6;
+  }
+
+  .date-input__month {
+    @apply text-base font-semibold text-text capitalize;
+  }
+
+  .date-input__year {
+    @apply text-base font-semibold text-text;
+  }
+
+  .date-input__body {
+    @apply relative;
+  }
+
+  .date-input__nav {
+    @apply absolute top-1/2 -translate-y-1/2 z-10
+           flex items-center justify-center w-6 h-6 rounded-sm
+           text-text-secondary hover:text-primary
+           transition-colors duration-150 cursor-pointer
+           disabled:opacity-30 disabled:cursor-not-allowed;
+  }
+
+  .date-input__nav--prev {
+    @apply left-0;
+  }
+
+  .date-input__nav--next {
+    @apply right-0;
+  }
+
+  .date-input__weekdays {
+    @apply grid grid-cols-7 mb-1 px-6;
+  }
+
+  .date-input__weekday {
+    @apply text-center text-xs text-text-secondary py-2;
+  }
+
+  .date-input__grid {
+    @apply grid grid-cols-7 gap-1 px-6;
+  }
+
+  .date-input__day {
+    @apply aspect-square flex items-center justify-center
+           text-sm font-medium rounded-sm
+           transition-colors duration-150 cursor-pointer
+           bg-bg text-text;
+  }
+
+  .date-input__day:hover {
+    @apply bg-primary-soft text-primary;
+  }
+
+  .date-input__day--empty {
+    @apply bg-transparent pointer-events-none;
+  }
+
+  .date-input__day--hidden {
+    @apply invisible;
+  }
+
+  .date-input__day--selected {
+    @apply bg-primary text-white;
+  }
+
+  .date-input__day--selected:hover {
+    @apply bg-primary text-white;
+  }
+
+  .balance-card {
+    @apply flex flex-col pt-6 pb-0;
+  }
+
+  .balance-card--editing {
+    @apply flex-1;
+  }
+
+  .balance-card--editing .balance-card__header {
+    margin-bottom: 12px;
+  }
+
+  .balance-card__edit {
+    @apply flex flex-col flex-1 gap-3;
+  }
+
+  .balance-card__edit--hidden {
+    display: none;
+  }
+
+  .balance-card__edit-buttons {
+    @apply mt-auto pb-8 flex flex-col gap-5;
+  }
+
+  .balance-card__header {
+    @apply flex items-center justify-between gap-4 mb-0.5;
+  }
+
+  .balance-card__title {
+    @apply text-base text-text-secondary;
+  }
+
+  .balance-card__corner {
+    @apply text-base font-medium text-primary shrink-0;
+  }
+
+  .balance-card__amount-row {
+    @apply flex items-baseline gap-2 flex-wrap mb-4;
+  }
+
+  .balance-card__amount-row--edit {
+    display: none;
+  }
+
+  .balance-card__edit .balance-card__amount-row {
+    margin-bottom: 0;
+  }
+
+  .balance-card__amount {
+    @apply text-2xl font-semibold text-text;
+  }
+
+  .balance-card__days {
+    @apply text-sm text-text-secondary;
+  }
+
+  .balance-card__buttons {
+    @apply flex flex-row gap-4;
+  }
+
+  .spending-card {
+    @apply flex flex-col flex-1 pt-6 pb-0;
+  }
+
+  .spending-card__save-wrapper {
+    @apply mt-auto pt-4 pb-8;
+  }
+
+  .spending-card__title {
+    @apply text-base font-medium text-text-secondary mb-0.5;
+  }
+
+  .spending-card__amount-row {
+    @apply flex items-baseline gap-1 flex-wrap mb-3;
+  }
+
+  .spending-card__today {
+    @apply text-[32px] font-bold text-success;
+  }
+
+  .spending-card__today--over {
+    @apply text-danger;
+  }
+
+  .spending-card__separator {
+    @apply text-[32px] font-bold text-text-secondary;
+  }
+
+  .spending-card__limit {
+    @apply text-[32px] font-bold text-text-secondary;
+  }
+
+  .spending-card__feedback {
+    @apply text-xs text-text-secondary;
+  }
+
+  .spending-card__feedback + .input-wrapper {
+    margin-top: 12px;
+  }
+
+  .spending-card__feedback--over {
+    @apply text-danger;
+  }
+
+  .recent-block {
+    @apply flex-col pt-8;
+  }
+
+  .recent-block__header {
+    @apply flex flex-col mb-4;
+  }
+
+  .recent-block__title {
+    @apply text-xl font-semibold text-text;
+  }
+
+  .recent-block__average {
+    @apply text-xs text-primary mt-1;
+  }
+
+  .recent-block__list {
+    @apply flex flex-col;
+  }
+
+  .recent-block__empty {
+    @apply text-sm text-text-secondary py-2;
+  }
+
+  .recent-block__list + .btn {
+    margin-top: 24px;
+  }
+
+  .transaction-item {
+    @apply flex items-center justify-between gap-3
+           py-3 border-b border-border;
+  }
+
+  .transaction-item:last-child {
+    @apply border-b-0;
+  }
+
+  .transaction-item__amount {
+    @apply text-base font-semibold text-text;
+  }
+
+  .transaction-item__right {
+    @apply flex items-center gap-3;
+  }
+
+  .transaction-item__date {
+    @apply text-sm text-text-secondary;
+  }
+
+  .transaction-item__delete {
+    @apply flex items-center justify-center
+           w-6 h-6 rounded-sm cursor-pointer
+           text-text-secondary hover:bg-primary-soft
+           transition-colors duration-150;
+  }
+
+  .history-page {
+    @apply flex flex-col flex-1 w-full;
+  }
+
+  .history-page__header {
+    @apply flex flex-col pt-8;
+  }
+
+  .history-page__title {
+    @apply text-[24px] font-semibold text-text;
+  }
+
+  .history-page__average {
+    @apply text-xs text-primary mt-1;
+  }
+
+  .history-page__list {
+    @apply flex flex-col mt-4;
+  }
+
+  .history-page__empty {
+    @apply text-sm text-text-secondary py-4 text-center;
+  }
+
+  .history-page__item {
+    @apply flex items-center justify-between gap-3 py-3;
+  }
+
+  .history-page__item + .history-page__item {
+    @apply border-t border-border;
+  }
+
+  .history-page__amount {
+    @apply text-base font-semibold text-text;
+  }
+
+  .history-page__item-right {
+    @apply flex items-center gap-3;
+  }
+
+  .history-page__date {
+    @apply text-sm text-text-secondary;
+  }
+
+  .history-page__delete {
+    @apply flex items-center justify-center
+           w-6 h-6 rounded-sm cursor-pointer
+           text-text-secondary hover:bg-primary-soft
+           transition-colors duration-150;
+  }
+
+  .history-page__back-wrapper {
+    @apply mt-auto pt-6 pb-8;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    padding-inline: clamp(150px, 184.62px - 2.404vw, 160px);
+  }
+
+  .page__content {
+    justify-content: center;
+    gap: 8px;
+    padding-inline: clamp(90px, -402.34px + 48.08vw, 290px);
+  }
+
+  .card {
+    @apply bg-surface rounded-md shadow-e2 p-6;
+  }
+
+  .balance-card,
+  .spending-card,
+  .recent-block,
+  .history-page {
+    @apply bg-surface rounded-md shadow-e2 p-6;
+  }
+
+  .balance-card {
+    @apply flex-none;
+  }
+
+  .spending-card {
+    @apply flex-none;
+  }
+
+  .history-page {
+    @apply flex-none;
+  }
+
+  .balance-card--editing {
+    @apply flex-none;
+  }
+
+  .balance-card__edit-buttons {
+    @apply mt-0 pb-0;
+  }
+
+  .balance-card__amount-row--edit {
+    display: flex;
+  }
+
+  .spending-card__save-wrapper {
+    @apply mt-0 pb-0;
+  }
+
+  .recent-block__header {
+    @apply mb-4;
+  }
+
+  .history-page__header {
+    @apply pt-0;
+  }
+
+  .history-page__list {
+    max-height: 150px;
+    overflow-y: auto;
+  }
+
+  .history-page__back-wrapper {
+    @apply pb-0;
+  }
+
+  .input-wrapper--hide-tablet {
+    display: none;
+  }
+}
+
+@media (min-width: 1440px) {
+  .page__content {
+    justify-content: flex-start;
+    padding-top: 64px;
+  }
+
+  .page--center .page__content {
+    justify-content: center;
+    padding-top: 0;
+  }
+}
