@@ -3,12 +3,9 @@ import { daysBetween, startOfToday } from '../utils/dates';
 import type { Budget, Transaction } from '../models/schemas';
 
 export interface BudgetMetrics {
-  totalDays: number;
   daysLeft: number;
-  dailyLimit: number;
+  isExpired: boolean;
   totalBalance: number;
-  remainingDaily: number;
-  todaySpent: number;
   todayRemaining: number;
   averageDaily: number;
   dailyLimitToday: number;
@@ -17,16 +14,12 @@ export interface BudgetMetrics {
 export function calculateMetrics(budget: Budget, transactions: Transaction[]): BudgetMetrics {
   const today = startOfToday();
 
-  const totalDays = Math.max(daysBetween(budget.startDate, budget.endDate), 1);
-  const daysLeft = Math.max(daysBetween(today, budget.endDate), 1);
-
-  const dailyLimit = budget.initialBalance / totalDays;
+  const daysLeft = Math.max(daysBetween(today, budget.endDate), 0);
+  const isExpired = daysLeft === 0;
 
   let totalIncome = 0;
   let totalExpense = 0;
   let todaySpent = 0;
-
-  // Расходы по дням (для averageDaily)
   const expenseDays = new Set<string>();
 
   for (const tx of transactions) {
@@ -43,20 +36,17 @@ export function calculateMetrics(budget: Budget, transactions: Transaction[]): B
   }
 
   const totalBalance = budget.initialBalance + totalIncome - totalExpense;
-  const balanceAtStartOfToday = totalBalance + todaySpent;
-  const dailyLimitToday = balanceAtStartOfToday / daysLeft;
-  const remainingDaily = totalBalance / daysLeft;
+
+  const dailyLimitToday = isExpired ? 0 : (totalBalance + todaySpent) / daysLeft;
   const todayRemaining = dailyLimitToday - todaySpent;
 
-  const averageDaily = expenseDays.size > 0 ? totalExpense / expenseDays.size : 0;
+  const passedDays = Math.max(daysBetween(budget.startDate, today) + 1, 1);
+  const averageDaily = totalExpense / passedDays;
 
   return {
-    totalDays,
     daysLeft,
-    dailyLimit,
+    isExpired,
     totalBalance,
-    remainingDaily,
-    todaySpent,
     todayRemaining,
     averageDaily,
     dailyLimitToday,

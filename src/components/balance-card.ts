@@ -190,13 +190,21 @@ export function createBalanceCard(options: BalanceCardOptions): BalanceCardCompo
     metrics = nextMetrics;
     budget = nextBudget;
 
-    corner.textContent = `${formatMoneyPlain(nextMetrics.dailyLimitToday)} ₽ в день`;
+    if (nextMetrics.isExpired) {
+      corner.textContent = '';
+      viewAmount.textContent = formatMoney(nextMetrics.totalBalance);
+      viewDays.textContent = 'период истёк';
 
-    viewAmount.textContent = formatMoney(nextMetrics.totalBalance);
-    viewDays.textContent = `на ${formatDays(nextMetrics.daysLeft)}`;
+      yourBalanceViewAmount.textContent = formatMoney(nextMetrics.totalBalance);
+      yourBalanceViewDays.textContent = 'период истёк';
+    } else {
+      corner.textContent = `${formatMoneyPlain(nextMetrics.dailyLimitToday)}\u2009₽ в день`;
+      viewAmount.textContent = formatMoney(nextMetrics.totalBalance);
+      viewDays.textContent = `на ${formatDays(nextMetrics.daysLeft)}`;
 
-    yourBalanceViewAmount.textContent = formatMoney(nextMetrics.totalBalance);
-    yourBalanceViewDays.textContent = `на ${formatDays(nextMetrics.daysLeft)}`;
+      yourBalanceViewAmount.textContent = formatMoney(nextMetrics.totalBalance);
+      yourBalanceViewDays.textContent = `на ${formatDays(nextMetrics.daysLeft)}`;
+    }
 
     if (isEditMode) {
       yourBalanceInput.setValue(formatMoney(nextMetrics.totalBalance));

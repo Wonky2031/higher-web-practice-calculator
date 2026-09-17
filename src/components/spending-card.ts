@@ -88,6 +88,16 @@ export function createSpendingCard(options: SpendingCardOptions): SpendingCardCo
   }
 
   function update(nextMetrics: BudgetMetrics): void {
+    if (nextMetrics.isExpired) {
+      todayRemainingEl.textContent = '0\u2009₽';
+      dailyLimitEl.textContent = '0';
+      todayRemainingEl.classList.remove('spending-card__today--over');
+
+      feedback.textContent = 'Период истёк';
+      feedback.classList.remove('spending-card__feedback--over');
+      return;
+    }
+
     todayRemainingEl.textContent = `${formatMoneyPlain(nextMetrics.todayRemaining)}\u2009₽`;
     dailyLimitEl.textContent = formatMoneyPlain(nextMetrics.dailyLimitToday);
 
